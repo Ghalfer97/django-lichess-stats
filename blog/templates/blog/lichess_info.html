@@ -1,0 +1,86 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+
+
+<!--
+<h1>Lichess Account Info</h1>
+<form method="post">
+    {% csrf_token %}
+    <input type= "text" name="username" placeholder="Enter Account Name" required>
+    <input list="gamemodes" name="gamemode" placeholder="Select Gamemode" required>
+        <datalist id="gamemodes">
+            <option value="all">All</option>
+            <option value="bullet">Bullet</option>
+            <option value="blitz">Blitz</option>
+            <option value="rapid">Rapid</option>
+            <option value="classical">Classical</option>
+        </datalist>
+    <input type="number" name="number_of_games" placeholder="Enter number of games" required>
+    <button type="submit" class="btn btn-primary">Get Data</button>
+</form> -->
+
+
+<head>
+    <title>Lichess Data</title>
+    <!-- Add Bootstrap for nicer table formatting -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+    <h1 class="mb-4">Get Lichess Data</h1>
+    <form method="post" class="mb-4">
+        {% csrf_token %}
+        <div class="mb-3">
+        <label style="font-weight: bold; font-size: 18px;">
+            {{ form.username.label_tag }}
+        </label>
+            {{ form.username }}
+        </div>
+        <div class="mb-3">
+            <label style="font-weight: bold; font-size: 18px;">
+            {{ form.gamemode.label_tag }}
+        </label>
+            {{ form.gamemode }}
+        </div>
+        <div class="mb-3">
+            <label style="font-weight: bold; font-size: 18px;">
+            {{ form.number_of_games.label_tag }}
+        </label>
+            {{ form.number_of_games }}
+        </div>
+        <div class="mb-3">
+            <label style="font-weight: bold; font-size: 18px;">
+            {{ form.opening.label_tag }}
+        </label>
+            {{ form.opening }}
+        </div>
+        <button type="submit" class="btn btn-primary">Get Stats</button>
+    </form> 
+       <!--  <div>
+            {{ table|safe }}
+        </div>-->
+    </div>
+</body>
+<h1 class="mb-4">Your Lichess Results</h1>
+{% if table %}
+        <h2>Lichess Overview</h2>
+        <div class="table-responsive">{{ table|safe }}</div>
+    {% endif %}
+
+{% if total_table %}
+    <h2>Lichess Stats</h2>
+    <div>{{ total_table|safe }}</div>
+{% endif %}
+
+
+<!--<p><strong>Total Games:</strong> {{ total_games }}</p>
+<p><strong>Winrate with White:</strong> {{ white_as_percentage_of_wins }}%</p>
+<p><strong>Winrate with Black:</strong> {{ black_as_percentage_of_wins }}%</p> -->
+
+{% endblock %}
+
+{% if result is not None %}
+    <h2>Result: {{ result }}</h2>
+{% endif %}
