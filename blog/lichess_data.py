@@ -7,17 +7,18 @@ from datetime import datetime
 
 class LichessData:
 
-    def __init__(self,username="Fearghal97",number_of_games=500,gamemode="all",opening=""):
-        self.API_TOKEN="lip_tr3tgUCkZ8B1ctzfZYn3"
+    def __init__(self,username="Fearghal97",number_of_games=0,gamemode="all",opening="",personal_token=""):
+        self.error_message=""
+        self.API_TOKEN="lip_tr3tgUCkZ8B1ctzfZYn3" #Replaced with self.personal_token
         #self.USERNAME="Fearghal97"
         self.USERNAME = username
         self.number_of_games = number_of_games
         self.gamemode=gamemode
         self.opening=opening
         self.url = f"https://lichess.org/api/games/user/{self.USERNAME}"
-
+        self.personal_token=personal_token
         self.headers = {
-            "Authorization": f"Bearer {self.API_TOKEN}",
+            "Authorization": f"Bearer {self.personal_token}",
             "Accept": "application/x-ndjson"
         }
 
@@ -28,23 +29,26 @@ class LichessData:
             "pgnInJson": True,  # return PGN in JSON format
             "opening": True
         }
+
         self.records=[]
 
     def get_games_from_lichess(self):
         self.games=[]
-        with requests.get(self.url, headers=self.headers, params=self.params) as r:
-            r.raise_for_status()
-            for line in r.iter_lines(decode_unicode=True):
-                if not line:              # skip keep-alives/blank lines
-                    continue
-                try:
-                    self.games.append(json.loads(line))
-                except json.JSONDecodeError as e:
-                    print("Bad line:", line[:200], e)
+        try:
+            with requests.get(self.url, headers=self.headers, params=self.params) as r:
+                r.raise_for_status()
+                for line in r.iter_lines(decode_unicode=True):
+                    if not line:              # skip keep-alives/blank lines
+                        continue
+                    try:
+                        self.games.append(json.loads(line))
+                    except json.JSONDecodeError as e:
+                        print("Bad line:", line[:200], e)
 
-        #print(len(self.games), "games loaded")
-        #print(self.games[0].keys()) # games is a list of dictionaries with keys and values
-
+            #print(len(self.games), "games loaded")
+            #print(self.games[0].keys()) # games is a list of dictionaries with keys and values
+        except:
+            self.error_message = "Invalid Personal Token Used. Please try another one."
         return self.games
 
     def create_lichess_dataframe(self,records):
