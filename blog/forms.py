@@ -22,7 +22,7 @@ class LichessForm(forms.Form):
     number_of_games = forms.IntegerField(
         label="Number of Games",
         min_value=1,
-        max_value=10000,
+        max_value=20000,
         widget=forms.NumberInput(attrs={"class": "form-control", "placeholder": "e.g. 500"})
     )
 
