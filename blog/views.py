@@ -15,6 +15,7 @@ def about(request):
 def lichess_view(request):
     result_html = None
     total_result_html = None
+    error_message = None
     if request.method=="POST":
         form = LichessForm(request.POST)
         #username= str(request.POST.get("username","Fearghal97"))
@@ -25,27 +26,35 @@ def lichess_view(request):
             gamemode = form.cleaned_data["gamemode"]
             number_of_games = form.cleaned_data["number_of_games"]
             opening = form.cleaned_data["opening"]
-            
-            lichess_data=LichessData(username,number_of_games,gamemode,opening)
+            personal_token= form.cleaned_data["personal_token"]
+            if personal_token!="":
+                try:
+                    lichess_data=LichessData(username,number_of_games,gamemode,opening,personal_token)
+                    sample_result,lichess_df,total_results_df = lichess_data.run_everything() # This is a dataframe
 
-            sample_result,lichess_df,total_results_df = lichess_data.run_everything() # This is a dataframe
+                    #sample_result=sample_result.reset_index(drop=True)
+                    #result = sample_result.to_dict(orient="records")[0] 
+                    #result = sample_result.iloc[0].to_dict()
 
-            #sample_result=sample_result.reset_index(drop=True)
-            #result = sample_result.to_dict(orient="records")[0] 
-            #result = sample_result.iloc[0].to_dict()
+                    result_html = sample_result.to_html(
+                        classes="table table-striped table-bordered",  # Bootstrap styling
+                        index=False,  # hides the index column if you don’t need it
+                        justify="center"  # aligns table nicely
+                    )
 
-            result_html = sample_result.to_html(
-                classes="table table-striped table-bordered",  # Bootstrap styling
-                index=False,  # hides the index column if you don’t need it
-                justify="center"  # aligns table nicely
-            )
-
-            total_result_html = total_results_df.to_html(
-                classes="table table-striped table-bordered",  # Bootstrap styling
-                index=False,  # hides the index column if you don’t need it
-                justify="center"  # aligns table nicely
-            )
-        #sample_results 
+                    total_result_html = total_results_df.to_html(
+                        classes="table table-striped table-bordered",  # Bootstrap styling
+                        index=False,  # hides the index column if you don’t need it
+                        justify="center"  # aligns table nicely
+                    )
+                #sample_results 
+                except:
+                    if len(lichess_data.error_message)>0:
+                        error_message=lichess_data.error_message
+                    else:
+                        error_message="Unknown Error"
+            else:
+                form = LichessForm()
 
     else:
         form = LichessForm()
@@ -53,7 +62,8 @@ def lichess_view(request):
     context = {
         "form": form,
         "table":result_html,
-        "total_table":total_result_html
+        "total_table":total_result_html,
+        "error": error_message
         }
 
     return render(request, "blog/lichess_info.html",context)
