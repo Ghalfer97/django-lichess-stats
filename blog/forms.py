@@ -31,3 +31,8 @@ class LichessForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "e.g. Sicilian Defense"})
     )
+
+    personal_token = forms.CharField(
+        label="Personal Token",
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter your Lichess Personal Token"})
+    )
