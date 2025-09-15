@@ -8,9 +8,7 @@ from datetime import datetime
 class LichessData:
 
     def __init__(self,username="Fearghal97",number_of_games=0,gamemode="all",opening="",personal_token=""):
-        self.error_message=""
-        self.API_TOKEN="lip_tr3tgUCkZ8B1ctzfZYn3" #Replaced with self.personal_token
-        #self.USERNAME="Fearghal97"
+        self.error_message=None
         self.USERNAME = username
         self.number_of_games = number_of_games
         self.gamemode=gamemode
@@ -47,8 +45,12 @@ class LichessData:
 
             #print(len(self.games), "games loaded")
             #print(self.games[0].keys()) # games is a list of dictionaries with keys and values
-        except:
-            self.error_message = "Invalid Personal Token Used. Please try another one."
+        except requests.exceptions.HTTPError as http_err:
+            print(f"Lichess returned an error: {http_err}")
+            self.error_message = str(http_err)
+        except requests.exceptions.RequestException as e:
+            self.error_message = str(e)
+
         return self.games
 
     def create_lichess_dataframe(self,records):
