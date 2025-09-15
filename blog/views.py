@@ -49,7 +49,8 @@ def lichess_view(request):
                     )
                 #sample_results 
                 except:
-                    if len(lichess_data.error_message)>0:
+                    print (lichess_data.error_message)
+                    if lichess_data.error_message:
                         error_message=lichess_data.error_message
                     else:
                         error_message="Unknown Error"
