@@ -22,7 +22,7 @@ class LichessForm(forms.Form):
     number_of_games = forms.IntegerField(
         label="Number of Games",
         min_value=1,
-        max_value=10000,
+        max_value=20000,
         widget=forms.NumberInput(attrs={"class": "form-control", "placeholder": "e.g. 500"})
     )
 
@@ -30,4 +30,9 @@ class LichessForm(forms.Form):
         label="Opening (optional)",
         required=False,
         widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "e.g. Sicilian Defense"})
+    )
+
+    personal_token = forms.CharField(
+        label="Personal Token",
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter your Lichess Personal Token"})
     )

@@ -40,6 +40,13 @@
         </div>
         <div class="mb-3">
             <label style="font-weight: bold; font-size: 18px;">
+                {{ form.personal_token.label_tag }}
+            </label>
+                {{ form.personal_token }}
+            </div>
+        <a target="_blank" rel="noopener noreferrer" href="https://lichess.org/account/oauth/token">Get Personal Access Token Here</a>
+        <div class="mb-3">
+            <label style="font-weight: bold; font-size: 18px;">
             {{ form.gamemode.label_tag }}
         </label>
             {{ form.gamemode }}
@@ -65,15 +72,18 @@
 </body>
 <h1 class="mb-4">Your Lichess Results</h1>
 {% if table %}
-        <h2>Lichess Overview</h2>
-        <div class="table-responsive">{{ table|safe }}</div>
-    {% endif %}
+    <h2>Lichess Overview</h2>
+    <div class="table-responsive">{{ table|safe }}</div>
+{% endif %}
 
 {% if total_table %}
     <h2>Lichess Stats</h2>
     <div>{{ total_table|safe }}</div>
 {% endif %}
 
+{% if error %}
+    <div style="color: red; font-weight: bold;">{{ error|safe }}</div>
+{% endif %}
 
 <!--<p><strong>Total Games:</strong> {{ total_games }}</p>
 <p><strong>Winrate with White:</strong> {{ white_as_percentage_of_wins }}%</p>

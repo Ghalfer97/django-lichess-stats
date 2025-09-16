@@ -1,0 +1,1 @@
+console.log("Django static files are working!");
