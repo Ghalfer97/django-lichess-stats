@@ -12,7 +12,11 @@ class LichessData:
         self.USERNAME = username
         self.number_of_games = number_of_games
         self.gamemode=gamemode
-        self.opening=opening
+        if len(opening)>0:
+            self.opening_list=opening.split(',')
+        else:
+            self.opening_list=[]
+        #self.opening=opening
         self.url = f"https://lichess.org/api/games/user/{self.USERNAME}"
         self.personal_token=personal_token
         self.headers = {
@@ -201,8 +205,10 @@ class LichessData:
     def filter_data_by_user_input(self):
         if self.gamemode!="all":
             self.lichess_df=self.lichess_df[self.lichess_df['game_mode']==self.gamemode]
-        if self.opening!='' and self.opening in self.lichess_df['grouped_opening'].values:
-            self.lichess_df= self.lichess_df[self.lichess_df['grouped_opening']==self.opening]
+        #if self.opening!='' and self.opening in self.lichess_df['grouped_opening'].values:
+        #    self.lichess_df= self.lichess_df[self.lichess_df['grouped_opening']==self.opening]
+        if len(self.opening_list)>0:
+            self.lichess_df = self.lichess_df[self.lichess_df["grouped_opening"].isin(self.opening_list)]
 
         return self.lichess_df
 
