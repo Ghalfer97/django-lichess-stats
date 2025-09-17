@@ -82,8 +82,12 @@
 {% endif %}
 
 {% if error %}
-    <div style="color: red; font-weight: bold;">{{ error|safe }}</div>
+  <div class="alert alert-danger">{{ error }}</div>
 {% endif %}
+
+<!--{% if error %}
+    <div style="color: red; font-weight: bold;">{{ error|safe }}</div>
+{% endif %}-->
 
 <!--<p><strong>Total Games:</strong> {{ total_games }}</p>
 <p><strong>Winrate with White:</strong> {{ white_as_percentage_of_wins }}%</p>
